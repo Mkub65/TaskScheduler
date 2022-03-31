@@ -16,3 +16,6 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1633:File should have header", Justification = "<Pending>")]
 [assembly: SuppressMessage("Minor Code Smell", "S1210:\"Equals\" and the comparison operators should be overridden when implementing \"IComparable\"", Justification = "<Pending>", Scope = "type", Target = "~T:TaskScheduler.Task")]
 [assembly: SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "<Pending>", Scope = "type", Target = "~T:TaskScheduler.TaskCsv")]
+[assembly: SuppressMessage("Minor Code Smell", "S1210:\"Equals\" and the comparison operators should be overridden when implementing \"IComparable\"", Justification = "<Pending>", Scope = "type", Target = "~T:TaskScheduler.TaskCsv")]
+[assembly: SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "<Pending>", Scope = "type", Target = "~T:TaskScheduler.DateTimeMethode")]
+[assembly: SuppressMessage("Minor Code Smell", "S1075:URIs should not be hardcoded", Justification = "<Pending>", Scope = "member", Target = "~M:TaskScheduler.CsvMethodes.Writer(System.Collections.Generic.List{TaskScheduler.TaskCsv})")]

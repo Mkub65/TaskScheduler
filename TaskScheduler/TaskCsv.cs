@@ -1,10 +1,11 @@
 ﻿namespace TaskScheduler
 {
     using System.Globalization;
+    using System.Text;
     using CsvHelper;
     using CsvHelper.Configuration;
 
-    public class TaskCsv: IComparable<TaskCsv>
+    public class TaskCsv : IComparable<TaskCsv>
     {
         public TaskCsv()
         {
@@ -30,23 +31,18 @@
 
         public DateTime? EndDate { get; set; }
 
-        public int CompareTo(TaskCsv other)
+        public static List<AbstractTask> ToList(List<TaskCsv> listCsv)
         {
-            return this.ID.CompareTo(other.ID);
-        }
-
-        public static List<Task> ToList(List<TaskCsv> listCsv)
-        {
-            var taskList = new Dictionary<string, Task>();
+            var taskList = new Dictionary<string, AbstractTask>();
 
             for (int i = 0; i < listCsv.Count; i++)
             {
                 taskList.Add(listCsv[i].ID, new Task
                 {
                     ID = listCsv[i].ID,
-                    Priority = listCsv[i].Priority,
+                    Priority = listCsv[i].Priority.HasValue ? listCsv[i].Priority.Value : int.MaxValue,
                     Description = listCsv[i].Description,
-                    Predecessors = new List<Task>(),
+                    Predecessors = new List<AbstractTask>(),
                     Work = listCsv[i].Work,
                     Responsible = listCsv[i].Responsible,
                     MinStartDate = listCsv[i].MinStartDate,
@@ -68,8 +64,11 @@
             var taskList2 = taskList.Select(task => task.Value).ToList();
             foreach (var task in taskList2)
             {
-                task.list = taskList2;
+                task.List = taskList2;
             }
+
+            taskList2.Sort(new TaskPriorityComparer());
+
             return taskList2;
         }
 
@@ -79,21 +78,12 @@
 
             for (int i = 0; i < list.Count; i++)
             {
-                var p = string.Empty;
-
-
-                foreach (var item in list[i].Predecessors)
-                {
-                    p = p + item.ID + ",";
-                }
-
-
                 taskList.Add(new TaskCsv
                 {
                     ID = list[i].ID,
-                    Priority = list[i].Priority,
+                    Priority = list[i].Priority != int.MaxValue ? list[i].Priority : null,
                     Description = list[i].Description,
-                    Predecessors = p,
+                    Predecessors = string.Empty,
                     Work = list[i].Work,
                     Responsible = list[i].Responsible,
                     MinStartDate = list[i].MinStartDate,
@@ -103,7 +93,23 @@
                 });
             }
 
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (list[i].Predecessors.Count > 0)
+                {
+                    foreach (var item in list[i].Predecessors)
+                    {
+                        taskList[i].Predecessors = $"{taskList[i].Predecessors}{item.ID},";
+                    }
+                }
+            }
+
             return taskList;
+        }
+
+        public int CompareTo(TaskCsv other)
+        {
+            return this.ID.CompareTo(other.ID);
         }
     }
 }
