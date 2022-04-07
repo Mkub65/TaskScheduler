@@ -35,20 +35,51 @@
         {
             var taskList = new Dictionary<string, AbstractTask>();
 
-            for (int i = 0; i < listCsv.Count; i++)
+            for (int i = 0; i < listCsv.Count - 1; i++)
             {
-                taskList.Add(listCsv[i].ID, new Task
+                if (listCsv[i + 1].ID.Contains(listCsv[i].ID))
                 {
-                    ID = listCsv[i].ID,
-                    Priority = listCsv[i].Priority.HasValue ? listCsv[i].Priority.Value : int.MaxValue,
-                    Description = listCsv[i].Description,
-                    Predecessors = new List<AbstractTask>(),
-                    Work = listCsv[i].Work,
-                    Responsible = listCsv[i].Responsible,
-                    MinStartDate = listCsv[i].MinStartDate,
-                    MaxEndDate = listCsv[i].MaxEndDate,
-                });
+                    taskList.Add(listCsv[i].ID, new Milestone
+                    {
+                        ID = listCsv[i].ID,
+                        Priority = listCsv[i].Priority.HasValue ? listCsv[i].Priority.Value : int.MaxValue,
+                        Description = listCsv[i].Description,
+                        Predecessors = new List<AbstractTask>(),
+                        Work = listCsv[i].Work,
+                        Responsible = listCsv[i].Responsible,
+                        MinStartDate = listCsv[i].MinStartDate,
+                        MaxEndDate = listCsv[i].MaxEndDate,
+                    });
+                }
+                else
+                {
+                    taskList.Add(listCsv[i].ID, new Task
+                    {
+                        ID = listCsv[i].ID,
+                        Priority = listCsv[i].Priority.HasValue ? listCsv[i].Priority.Value : int.MaxValue,
+                        Description = listCsv[i].Description,
+                        Predecessors = new List<AbstractTask>(),
+                        Work = listCsv[i].Work,
+                        Responsible = listCsv[i].Responsible,
+                        MinStartDate = listCsv[i].MinStartDate,
+                        MaxEndDate = listCsv[i].MaxEndDate,
+                    });
+                }
             }
+
+            var j = listCsv.Count - 1;
+
+            taskList.Add(listCsv[j].ID, new Task
+            {
+                ID = listCsv[j].ID,
+                Priority = listCsv[j].Priority.HasValue ? listCsv[j].Priority.Value : int.MaxValue,
+                Description = listCsv[j].Description,
+                Predecessors = new List<AbstractTask>(),
+                Work = listCsv[j].Work,
+                Responsible = listCsv[j].Responsible,
+                MinStartDate = listCsv[j].MinStartDate,
+                MaxEndDate = listCsv[j].MaxEndDate,
+            });
 
             for (int i = 0; i < listCsv.Count; i++)
             {
@@ -72,7 +103,7 @@
             return taskList2;
         }
 
-        public static List<TaskCsv> FromList(List<Task> list)
+        public static List<TaskCsv> FromList(List<AbstractTask> list)
         {
             var taskList = new List<TaskCsv>();
 

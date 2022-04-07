@@ -6,7 +6,7 @@
     using System.Text;
     using System.Threading.Tasks;
 
-    public abstract class AbstractTask
+    public abstract class AbstractTask : IComparable<AbstractTask>
     {
         public List<AbstractTask>? List { get; set; }
 
@@ -28,8 +28,24 @@
 
         public bool StartDateCalculated { get; set; }
 
-        public virtual DateTime? StartDate { get; set; }
+        public virtual DateTime StartDate { get; set; }
 
-        public virtual DateTime? EndDate { get; set; }
+        public virtual DateTime EndDate { get; set; }
+
+        public int CompareTo(AbstractTask other)
+        {
+            if (this.StartDateCalculated && other.StartDateCalculated)
+            {
+                return this.StartDate.CompareTo(other.StartDate);
+            }
+            else if (this.StartDateCalculated)
+            {
+                return -1;
+            }
+            else
+            {
+                return 0;
+            }
+        }
     }
 }

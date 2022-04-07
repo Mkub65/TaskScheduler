@@ -7,7 +7,7 @@
     using CsvHelper;
     using CsvHelper.Configuration;
 
-    public class Task : AbstractTask, IComparable<Task>
+    public class Task : AbstractTask
     {
         public Task()
         {
@@ -15,7 +15,7 @@
             this.startDate = this.MinStartDate;
         }
 
-        public DateTime StartDate
+        public override DateTime StartDate
         {
             get
             {
@@ -32,25 +32,9 @@
 
         private DateTime startDate;
 
-        public DateTime? EndDate
+        public override DateTime EndDate
         {
             get { return this.StartDate.AddWorkDays(this.Work.GetValueOrDefault(0)); }
-        }
-
-        public int CompareTo(Task other)
-        {
-            if (this.StartDateCalculated && other.StartDateCalculated)
-            {
-                return this.StartDate.CompareTo(other.StartDate);
-            }
-            else if (this.StartDateCalculated)
-            {
-                return -1;
-            }
-            else
-            {
-                return 0;
-            }
         }
 
         public DateTime FindFirstEmptySlot(DateTime startDate, List<AbstractTask> taskList)
@@ -63,19 +47,19 @@
 
             for (int i = 0; i < taskList.Count - 1; i++)
             {
-                if (taskList[i].EndDate.Value.AddWorkDays(this.Work.GetValueOrDefault(0)) < taskList[i + 1].StartDate)
+                if (taskList[i].EndDate.AddWorkDays(this.Work.GetValueOrDefault(0)) < taskList[i + 1].StartDate)
                 {
-                    return taskList[i].EndDate.GetValueOrDefault(DateTime.MinValue);
+                    return taskList[i].EndDate;
                 }
             }
 
-            if (taskList.Count == 0 || startDate > taskList[^1].EndDate.Value)
+            if (taskList.Count == 0 || startDate > taskList[^1].EndDate)
             {
                 return startDate;
             }
             else
             {
-                return taskList[^1].EndDate.Value;
+                return taskList[^1].EndDate;
             }
         }
     }

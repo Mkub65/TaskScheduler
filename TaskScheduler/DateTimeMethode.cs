@@ -13,7 +13,7 @@
             var endDateList = new List<DateTime>();
             for (int i = 0; i < list.Count; i++)
             {
-                endDateList.Add(list[i].EndDate.GetValueOrDefault());
+                endDateList.Add(list[i].EndDate);
             }
 
             DateTime max = minStartDate;
@@ -27,6 +27,7 @@
 
             return max;
         }
+
         public static DateTime AddWorkDays(this DateTime date, int workingDays)
         {
             int direction = workingDays < 0 ? -1 : 1;
@@ -57,6 +58,34 @@
             };
 
             return holidays.Contains(date.Date);
+        }
+
+        public static DateTime Min(this IEnumerable<DateTime> dates)
+        {
+            DateTime min = dates.First();
+            foreach (var date in dates)
+            {
+                if (date < min)
+                {
+                    min = date;
+                }
+            }
+
+            return min;
+        }
+
+        public static DateTime MaxEndDate(this IEnumerable<DateTime> dates)
+        {
+            DateTime max = dates.First();
+            foreach (var date in dates)
+            {
+                if (date > max)
+                {
+                    max = date;
+                }
+            }
+
+            return max;
         }
     }
 }
