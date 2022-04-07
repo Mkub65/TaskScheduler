@@ -1,10 +1,11 @@
 ﻿namespace TaskScheduler
 {
     using System.Globalization;
+    using System.Text;
     using CsvHelper;
     using CsvHelper.Configuration;
 
-    public class TaskCsv
+    public class TaskCsv : IComparable<TaskCsv>
     {
         public TaskCsv()
         {
@@ -30,26 +31,55 @@
 
         public DateTime? EndDate { get; set; }
 
-        public static List<Task> ToList(List<TaskCsv> listCsv)
+        public static List<AbstractTask> ToList(List<TaskCsv> listCsv)
         {
-            var taskList = new Dictionary<string, Task>();
+            var taskList = new Dictionary<string, AbstractTask>();
 
-            for (int i = 0; i < listCsv.Count; i++)
+            for (int i = 0; i < listCsv.Count - 1; i++)
             {
-                taskList.Add(listCsv[i].ID, new Task
+                if (listCsv[i + 1].ID.Contains(listCsv[i].ID))
                 {
-                    ID = listCsv[i].ID,
-                    Priority = listCsv[i].Priority,
-                    Description = listCsv[i].Description,
-                    Predecessors = new List<Task>(),
-                    Work = listCsv[i].Work,
-                    Responsible = listCsv[i].Responsible,
-                    MinStartDate = listCsv[i].MinStartDate,
-                    MaxEndDate = listCsv[i].MaxEndDate,
-                    StartDate = listCsv[i].StartDate,
-                    EndDate = listCsv[i].EndDate,
-                });
+                    taskList.Add(listCsv[i].ID, new Milestone
+                    {
+                        ID = listCsv[i].ID,
+                        Priority = listCsv[i].Priority.HasValue ? listCsv[i].Priority.Value : int.MaxValue,
+                        Description = listCsv[i].Description,
+                        Predecessors = new List<AbstractTask>(),
+                        Work = listCsv[i].Work,
+                        Responsible = listCsv[i].Responsible,
+                        MinStartDate = listCsv[i].MinStartDate,
+                        MaxEndDate = listCsv[i].MaxEndDate,
+                    });
+                }
+                else
+                {
+                    taskList.Add(listCsv[i].ID, new Task
+                    {
+                        ID = listCsv[i].ID,
+                        Priority = listCsv[i].Priority.HasValue ? listCsv[i].Priority.Value : int.MaxValue,
+                        Description = listCsv[i].Description,
+                        Predecessors = new List<AbstractTask>(),
+                        Work = listCsv[i].Work,
+                        Responsible = listCsv[i].Responsible,
+                        MinStartDate = listCsv[i].MinStartDate,
+                        MaxEndDate = listCsv[i].MaxEndDate,
+                    });
+                }
             }
+
+            var j = listCsv.Count - 1;
+
+            taskList.Add(listCsv[j].ID, new Task
+            {
+                ID = listCsv[j].ID,
+                Priority = listCsv[j].Priority.HasValue ? listCsv[j].Priority.Value : int.MaxValue,
+                Description = listCsv[j].Description,
+                Predecessors = new List<AbstractTask>(),
+                Work = listCsv[j].Work,
+                Responsible = listCsv[j].Responsible,
+                MinStartDate = listCsv[j].MinStartDate,
+                MaxEndDate = listCsv[j].MaxEndDate,
+            });
 
             for (int i = 0; i < listCsv.Count; i++)
             {
@@ -63,8 +93,54 @@
             }
 
             var taskList2 = taskList.Select(task => task.Value).ToList();
+            foreach (var task in taskList2)
+            {
+                task.List = taskList2;
+            }
+
+            taskList2.Sort(new TaskPriorityComparer());
 
             return taskList2;
+        }
+
+        public static List<TaskCsv> FromList(List<AbstractTask> list)
+        {
+            var taskList = new List<TaskCsv>();
+
+            for (int i = 0; i < list.Count; i++)
+            {
+                taskList.Add(new TaskCsv
+                {
+                    ID = list[i].ID,
+                    Priority = list[i].Priority != int.MaxValue ? list[i].Priority : null,
+                    Description = list[i].Description,
+                    Predecessors = string.Empty,
+                    Work = list[i].Work,
+                    Responsible = list[i].Responsible,
+                    MinStartDate = list[i].MinStartDate,
+                    MaxEndDate = list[i].MaxEndDate,
+                    StartDate = list[i].StartDate,
+                    EndDate = list[i].EndDate,
+                });
+            }
+
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (list[i].Predecessors.Count > 0)
+                {
+                    foreach (var item in list[i].Predecessors)
+                    {
+                        taskList[i].Predecessors = $"{taskList[i].Predecessors}{item.ID},";
+                    }
+                }
+            }
+
+            return taskList;
+        }
+
+        public int CompareTo(TaskCsv other)
+        {
+            return this.ID.CompareTo(other.ID);
         }
     }
 }

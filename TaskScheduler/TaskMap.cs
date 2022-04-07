@@ -4,7 +4,7 @@
     using CsvHelper;
     using CsvHelper.Configuration;
 
-    public class TaskMap : ClassMap<Task>
+    public class TaskMap : ClassMap<TaskCsv>
     {
         public TaskMap()
         {

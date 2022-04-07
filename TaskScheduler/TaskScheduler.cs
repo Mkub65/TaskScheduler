@@ -15,7 +15,7 @@
 
             var list = TaskCsv.ToList(listCsv);
 
-            var startDateList = AlgorithmMethods.CountStartDate(list);
+            var startDateList = TaskCsv.FromList(list);
 
             startDateList.Sort();
 
