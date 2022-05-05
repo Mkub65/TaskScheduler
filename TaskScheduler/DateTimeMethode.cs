@@ -42,6 +42,7 @@
                     workingDays -= direction;
                 }
             }
+
             return newDate;
         }
 
@@ -49,12 +50,13 @@
         {
             // You'd load/cache from a DB or file somewhere rather than hardcode
             DateTime[] holidays =
-            new DateTime[] {
-            new DateTime(2010, 12,27),
-            new DateTime(2010,12,28),
-            new DateTime(2011,01,03),
-            new DateTime(2011,01,12),
-            new DateTime(2011,01,13)
+            new DateTime[]
+            {
+            new DateTime(2010, 12, 27),
+            new DateTime(2010, 12, 28),
+            new DateTime(2011, 01, 03),
+            new DateTime(2011, 01, 12),
+            new DateTime(2011, 01, 13),
             };
 
             return holidays.Contains(date.Date);
@@ -86,6 +88,21 @@
             }
 
             return max;
+        }
+
+        public static List<T> Join<T>(this List<T> first, List<T> second)
+        {
+            if (first == null)
+            {
+                return second;
+            }
+
+            if (second == null)
+            {
+                return first;
+            }
+
+            return first.Concat(second).ToList();
         }
     }
 }

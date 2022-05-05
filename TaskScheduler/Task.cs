@@ -9,6 +9,8 @@
 
     public class Task : AbstractTask
     {
+        private DateTime startDate;
+
         public Task()
         {
             this.StartDateCalculated = false;
@@ -29,8 +31,6 @@
                 return this.startDate;
             }
         }
-
-        private DateTime startDate;
 
         public override DateTime EndDate
         {

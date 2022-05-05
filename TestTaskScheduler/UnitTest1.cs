@@ -15,7 +15,7 @@ namespace TestTaskScheduler
             var recordList = CsvMethodes.Reader();
             CsvMethodes.Writer(recordList);
 
-            const string originalFile = @"./Reference.csv";
+            const string originalFile = @"./Zadania.csv";
             const string copiedFile = @"C:\Users\Maciek\Desktop\Zadania.csv";
 
             var originalHash = GetFileHash(originalFile);

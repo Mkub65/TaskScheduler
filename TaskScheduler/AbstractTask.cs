@@ -14,13 +14,13 @@
 
         public int Priority { get; set; }
 
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
-        public List<AbstractTask> Predecessors { get; set; }
+        public List<AbstractTask>? Predecessors { get; set; }
 
         public int? Work { get; set; }
 
-        public string Responsible { get; set; }
+        public string? Responsible { get; set; }
 
         public DateTime MinStartDate { get; set; }
 

@@ -106,4 +106,4 @@ C:\Users\Maciek\source\repos\TaskScheduler\TestTaskScheduler\obj\Debug\net6.0\Te
 C:\Users\Maciek\source\repos\TaskScheduler\TestTaskScheduler\obj\Debug\net6.0\TestTaskScheduler.genruntimeconfig.cache
 C:\Users\Maciek\source\repos\TaskScheduler\TestTaskScheduler\bin\Debug\net6.0\Microsoft.Practices.ServiceLocation.dll
 C:\Users\Maciek\source\repos\TaskScheduler\TestTaskScheduler\bin\Debug\net6.0\XAct.Core.PCL.dll
-C:\Users\Maciek\source\repos\TaskScheduler\TestTaskScheduler\bin\Debug\net6.0\Reference.csv
+C:\Users\Maciek\source\repos\TaskScheduler\TestTaskScheduler\bin\Debug\net6.0\Zadania.csv

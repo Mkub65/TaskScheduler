@@ -6,7 +6,7 @@
     using System.Text;
     using System.Threading.Tasks;
 
-    internal class Milestone : AbstractTask
+    public class Milestone : AbstractTask
     {
         public Milestone()
         {
@@ -17,7 +17,7 @@
         {
             get
             {
-                return this.List.Where(x => x.ID.Contains(this.ID + ".")).ToList().Select(x => x.StartDate).Min();
+                return this.List.Where(x => x.ID.Contains(this.ID + ".")).Select(x => x.StartDate).Min();
             }
         }
 
@@ -25,7 +25,7 @@
         {
             get
             {
-                return this.List.Where(x => x.ID.Contains(this.ID + ".")).ToList().Select(x => x.EndDate).Max();
+                return this.List.Where(x => x.ID.Contains(this.ID + ".")).Select(x => x.EndDate).Max();
             }
         }
 
@@ -33,7 +33,7 @@
 
         public static DateTime GetStartDate()
         {
-            return new DateTime();
+            return default;
         }
     }
 }
