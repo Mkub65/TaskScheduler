@@ -13,7 +13,11 @@ namespace TestTaskScheduler
         public void FullProcess()
         {
             var recordList = CsvMethodes.Reader();
-            CsvMethodes.Writer(recordList);
+            
+            var list = TaskCsv.ToList(recordList);
+            var startDateList = TaskCsv.FromList(list);
+            startDateList.Sort();
+            CsvMethodes.Writer(startDateList);
 
             const string originalFile = @"./Zadania.csv";
             const string copiedFile = @"C:\Users\Maciek\Desktop\Zadania.csv";
